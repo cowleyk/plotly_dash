@@ -22,7 +22,7 @@ class PlotlyDash(Block):
 
     def stop(self):
         try:
-            self._server_thread.join(1)
+            self._server_thread.join()
             self.logger.debug('server stopped')
         except:
             self.logger.warning('main thread exited before join()')
@@ -33,7 +33,7 @@ class PlotlyDash(Block):
         for signal in signals:
             figure = {'data': signal.data, 'layout': {'title': signal.title}}
             graphs.append(dcc.Graph(id=signal.title, figure=figure))
-        self.app.layout = html.Div(children=graphs)
+        self.app.layout = html.Div(graphs)
         self.logger.debug('displaying {} graphs '.format(len(graphs)))
 
     def _server(self):

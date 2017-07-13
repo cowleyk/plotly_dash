@@ -37,5 +37,4 @@ class TestExample(NIOBlockTestCase):
         # Div() is instantiated twice, in start() and process_signals()
         self.assertEqual(mock_div.call_count, 2)
         # our instances of Graph() are passed when process_signals() is called
-        self.assertEqual(mock_div.call_args_list[-1][1]['children'],
-                         graph_instances)
+        self.assertEqual(mock_div.call_args_list[-1][0][0], graph_instances)
