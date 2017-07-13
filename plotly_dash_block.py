@@ -1,14 +1,31 @@
+# from enum import Enum
 from nio.block.base import Block
-from nio.properties import VersionProperty
+from nio.properties import VersionProperty, ListProperty, PropertyHolder, \
+        Property, SelectProperty
 from nio.util.threading.spawn import spawn
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
 
 
+# class ElementTypes(Enum):
+    # Graph = 'Graph'
+
+class Series(PropertyHolder):
+    kwargs = Property(title='Keyword Args', default='{{ {} }}')
+    # type = ListProperty(ElementTypes,
+                        # title='Element Type',
+                        # default=ElementTypes.Graph)
+
+class Graphs(PropertyHolder):
+
+    id = Property(title='Graph ID', default = '')
+    series = ListProperty(Series, title='Series', default=[])
+
 class PlotlyDash(Block):
 
     version = VersionProperty('0.1.0')
+    graph_layout = ListProperty(Graphs, title='Graphs', default=[])
 
     def __init__(self):
         self._server_thread = None
@@ -29,13 +46,8 @@ class PlotlyDash(Block):
         super().stop()
 
     def process_signals(self, signals):
-        graphs = []
         for signal in signals:
-            figure = {'data': signal.data, 'layout': {'title': signal.title}}
-            graphs.append(dcc.Graph(id=signal.title, figure=figure))
-        self.app.layout = html.Div(graphs)
-        self.logger.debug('displaying {} graphs '.format(len(graphs)))
+            self.app.layout = html.Div([dcc.Graph(id=g.id(signal), figure={'data': [d.kwargs(signal) for d in g.series(signal)], 'layout': {'title': g.id(signal)}}) for g in self.graph_layout()])
 
     def _server(self):
-        self.app.layout = html.Div()
         self.app.run_server(debug=False)
