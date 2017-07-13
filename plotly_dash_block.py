@@ -11,18 +11,18 @@ class PlotlyDash(Block):
     version = VersionProperty('0.1.0')
 
     def __init__(self):
-        self._main_thread = None
+        self._server_thread = None
         self.app = dash.Dash()
         super().__init__()
 
     def start(self):
-        self._main_thread = spawn(self._server)
+        self._server_thread = spawn(self._server)
         self.logger.debug('server started on localhost:8050')
         super().start()
 
     def stop(self):
         try:
-            self._main_thread.join(1)
+            self._server_thread.join(1)
             self.logger.debug('server stopped')
         except:
             self.logger.warning('main thread exited before join()')
