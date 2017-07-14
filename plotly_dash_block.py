@@ -19,7 +19,7 @@ class Series(PropertyHolder):
 
 class Graphs(PropertyHolder):
 
-    id = Property(title='Graph ID', default = '')
+    id = Property(title='Graph Title', default = '')
     series = ListProperty(Series, title='Series', default=[])
 
 class PlotlyDash(Block):
@@ -38,6 +38,7 @@ class PlotlyDash(Block):
         super().start()
 
     def stop(self):
+        # todo: does not stop correctly, run_server() is a blocking call
         try:
             self._server_thread.join()
             self.logger.debug('server stopped')
@@ -50,4 +51,5 @@ class PlotlyDash(Block):
             self.app.layout = html.Div([dcc.Graph(id=g.id(signal), figure={'data': [d.kwargs(signal) for d in g.series(signal)], 'layout': {'title': g.id(signal)}}) for g in self.graph_layout()])
 
     def _server(self):
+        self.app.layout = html.Div()
         self.app.run_server(debug=False)
