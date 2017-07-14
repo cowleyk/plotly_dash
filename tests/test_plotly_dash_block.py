@@ -10,11 +10,11 @@ class TestExample(NIOBlockTestCase):
     def test_server_start(self):
         with patch('dash.Dash') as mock_dash:
             blk = PlotlyDash()
-            self.configure_block(blk, {})
+            self.configure_block(blk, {'port': 42})
             blk.start()
             blk.stop()
             self.assertEqual(mock_dash.call_count, 1)
-            self.assertEqual(mock_dash.return_value.run_server.call_count, 1)
+            mock_dash.return_value.run_server.assert_called_once_with(port=42)
 
     def test_page_layout(self):
         input_signals = [Signal({'a': {'name': 'a', 'y': [0,1,2]},
