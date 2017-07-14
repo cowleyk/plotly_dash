@@ -1,7 +1,7 @@
 # from enum import Enum
 from nio.block.base import Block
 from nio.properties import VersionProperty, ListProperty, PropertyHolder, \
-        Property, SelectProperty
+        Property, SelectProperty, IntProperty
 from nio.util.threading.spawn import spawn
 import dash
 import dash_core_components as dcc
@@ -25,6 +25,7 @@ class Graphs(PropertyHolder):
 class PlotlyDash(Block):
 
     version = VersionProperty('0.1.0')
+    port = IntProperty(title='Server Port', default=8050)
     graph_layout = ListProperty(Graphs, title='Graphs', default=[])
 
     def __init__(self):
@@ -52,4 +53,4 @@ class PlotlyDash(Block):
 
     def _server(self):
         self.app.layout = html.Div()
-        self.app.run_server(debug=False)
+        self.app.run_server(port=self.port())
