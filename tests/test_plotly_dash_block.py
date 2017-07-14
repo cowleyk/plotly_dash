@@ -14,7 +14,7 @@ class TestExample(NIOBlockTestCase):
             blk.start()
             blk.stop()
             self.assertEqual(mock_dash.call_count, 1)
-            mock_dash.return_value.run_server.assert_called_once_with(port=42)
+            mock_dash.return_value.run_server.assert_called_once_with(port=42, debug=False)
 
     def test_page_layout(self):
         input_signals = [Signal({'a': {'name': 'a', 'y': [0,1,2]},
