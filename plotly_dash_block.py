@@ -53,4 +53,5 @@ class PlotlyDash(Block):
 
     def _server(self):
         self.app.layout = html.Div()
-        self.app.run_server(port=self.port())
+        # if debug isn't passed the server breaks silently
+        self.app.run_server(debug=False, port=self.port())
