@@ -35,7 +35,7 @@ class PlotlyDash(Block):
 
     def start(self):
         self._server_thread = spawn(self._server)
-        self.logger.debug('server started on localhost:8050')
+        self.logger.debug('server started on localhost:{}'.format(self.port()))
         super().start()
 
     def stop(self):
