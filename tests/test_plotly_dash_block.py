@@ -20,10 +20,10 @@ class TestExample(NIOBlockTestCase):
         input_signals = [Signal({'a': {'name': 'a', 'y': [0,1,2]},
                                  'b': {'name': 'b', 'y': [2,1,0]},
                                  'c': {'name': 'c', 'x': [0,1,2], 'y': [1,1,1]}})]
-        config = {'graph_layout': [{'title': '0',
+        config = {'graph_layout': [{'id': '0',
                                    'series': [{'kwargs': "{{ {'name': $a['name'], 'y': $a['y']} }}"},
                                               {'kwargs': "{{ {'name': $b['name'], 'y': $b['y']} }}"}]},
-                                  {'title': '1',
+                                  {'id': '1',
                                    'series': [{'kwargs': "{{ {'name': $c['name'], 'x': $c['x'], 'y': $c['y']} }}"}]}]}
         with patch('dash.Dash') as mock_dash, \
                 patch('dash_html_components.Div') as mock_div, \
