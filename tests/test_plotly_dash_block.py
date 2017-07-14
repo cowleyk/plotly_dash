@@ -35,7 +35,9 @@ class TestExample(NIOBlockTestCase):
             blk.start()
             blk.process_signals(input_signals)
             blk.stop()
-            mock_div.assert_called_once_with(graphs)
+            # Div is called in _server() and process_signals()
+            self.assertEqual(mock_div.call_count, 2)
+            mock_div.assert_called_with(graphs)
             i = input_signals[0].to_dict()
             # todo: make this work for an arbitrary number of graph configs
             mock_graph.assert_any_call(id='0', figure={'layout': {'title': '0'}, 'data': [i['a'], i['b']]})
