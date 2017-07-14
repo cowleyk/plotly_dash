@@ -12,15 +12,15 @@ import dash_html_components as html
     # Graph = 'Graph'
 
 class Series(PropertyHolder):
-    series_kwargs = Property(title='Keyword Args', default='{{ {} }}')
+    kwargs = Property(title='Keyword Args', default='{{ {} }}')
     # type = ListProperty(ElementTypes,
                         # title='Element Type',
                         # default=ElementTypes.Graph)
 
 class Graphs(PropertyHolder):
 
-    graph_title = Property(title='Graph Title', default = '')
-    graph_series = ListProperty(Series, title='Series', default=[])
+    id = Property(title='Graph Title', default = '')
+    series = ListProperty(Series, title='Series', default=[])
 
 class PlotlyDash(Block):
 
@@ -49,7 +49,7 @@ class PlotlyDash(Block):
 
     def process_signals(self, signals):
         for signal in signals:
-            self.app.layout = html.Div([dcc.Graph(id=g.graph_title(signal), figure={'data': [d.series_kwargs(signal) for d in g.graph_series(signal)], 'layout': {'title': g.graph_title(signal)}}) for g in self.graph_layout()])
+            self.app.layout = html.Div([dcc.Graph(id=g.id(signal), figure={'data': [d.kwargs(signal) for d in g.series(signal)], 'layout': {'title': g.id(signal)}}) for g in self.graph_layout()])
 
     def _server(self):
         self.app.layout = html.Div()
